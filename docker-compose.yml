@@ -1,0 +1,36 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:14-alpine
+    container_name: postgres
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: citizix_db
+      POSTGRES_USER: citizix_user
+      POSTGRES_PASSWORD: S3cret
+    networks:
+      - insurance-network
+
+  insurance-api:
+    image: insurance-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: insurance-api
+    depends_on:
+      - postgres
+    ports:
+      - 9001:9001
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/citizix_db
+      SPRING_DATASOURCE_USERNAME: citizix_user
+      SPRING_DATASOURCE_PASSWORD: S3cret
+    networks:
+      - insurance-network
+
+networks:
+  insurance-network:
+    driver: bridge
