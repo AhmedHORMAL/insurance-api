@@ -1,0 +1,130 @@
+openapi: 3.0.3
+info:
+  title: Insurance Policy API
+  version: 1.0.0
+  description: API de gestion des polices d'assurance pour Tinubu
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+  /policies:
+    get:
+      summary: Lister toutes les polices d'assurance
+      responses:
+        '200':
+          description: Liste des polices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Policy'
+    post:
+      summary: Créer une nouvelle police d'assurance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyInput'
+      responses:
+        '201':
+          description: Police créée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+
+  /policies/{id}:
+    get:
+      summary: Obtenir une police par son identifiant
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: Police trouvée
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '404':
+          description: Police non trouvée
+    put:
+      summary: Mettre à jour une police existante
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyInput'
+      responses:
+        '200':
+          description: Police mise à jour
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Policy'
+        '404':
+          description: Police non trouvée
+
+components:
+  schemas:
+    Policy:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        name:
+          type: string
+          example: "Assurance Habitation"
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+          example: ACTIVE
+        startDate:
+          type: string
+          format: date-time
+          example: "2024-01-01T00:00:00Z"
+        endDate:
+          type: string
+          format: date-time
+          example: "2025-01-01T00:00:00Z"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-06-01T12:00:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-06-10T08:30:00Z"
+
+    PolicyInput:
+      type: object
+      required: [name, status, startDate, endDate]
+      properties:
+        name:
+          type: string
+        status:
+          type: string
+          enum: [ACTIVE, INACTIVE]
+        startDate:
+          type: string
+          format: date-time
+        endDate:
+          type: string
+          format: date-time
