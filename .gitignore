@@ -24,6 +24,7 @@ Icon?
 # JetBrains IntelliJ, WebStorm, PhpStorm, PyCharm…
 .idea/
 *.iml
+.mvn
 
 # Visual Studio Code
 .vscode/
